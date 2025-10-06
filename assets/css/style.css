@@ -1102,6 +1102,186 @@ section {
   color: var(--accent-gold);
 }
 
+.nav-links a.is-active {
+  color: var(--text);
+}
+
+.panel-hero,
+.services-hero {
+  padding: 140px 8vw 96px;
+  background: linear-gradient(160deg, rgba(7, 6, 13, 0.92), rgba(14, 12, 27, 0.72));
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: 65vh;
+}
+
+.panel-hero::after,
+.services-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(122, 77, 243, 0.25), transparent 60%);
+  pointer-events: none;
+}
+
+.panel-hero__content,
+.services-hero__content {
+  position: relative;
+  max-width: 720px;
+  z-index: 1;
+  display: grid;
+  gap: 18px;
+}
+
+.panel-hero__content h1,
+.services-hero__content h1 {
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.panel-main {
+  background: rgba(7, 6, 13, 0.6);
+}
+
+.admin-locked {
+  padding: 96px 8vw;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-locked__content {
+  max-width: 520px;
+  background: rgba(18, 16, 34, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 18px;
+}
+
+.admin-locked__content p {
+  color: rgba(244, 244, 247, 0.7);
+}
+
+.license-fieldset {
+  border: 1px solid rgba(122, 77, 243, 0.35);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  background: rgba(7, 6, 13, 0.45);
+  display: grid;
+  gap: 16px;
+}
+
+.license-fieldset legend {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0 12px;
+}
+
+.license-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.license-card {
+  background: rgba(18, 16, 34, 0.88);
+  border: 1px solid rgba(122, 77, 243, 0.25);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+  transition: var(--transition);
+}
+
+.license-card:hover {
+  border-color: rgba(122, 77, 243, 0.45);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.license-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.license-card__header input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-violet);
+}
+
+.license-card__body {
+  display: grid;
+  gap: 12px;
+}
+
+.license-card__body.is-hidden {
+  display: none;
+}
+
+.beat-license-control {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.beat-license-control__label {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 247, 0.65);
+}
+
+.beat-license-control__select {
+  background: rgba(7, 6, 13, 0.65);
+  border: 1px solid rgba(122, 77, 243, 0.4);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  padding: 10px 14px;
+}
+
+.beat-files[data-default-text=""] {
+  color: rgba(244, 244, 247, 0.6);
+}
+
+.services--alt {
+  background: rgba(18, 16, 34, 0.78);
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.workflow-step {
+  background: rgba(7, 6, 13, 0.55);
+  border: 1px solid rgba(122, 77, 243, 0.25);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: grid;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+
+.workflow-step h3 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.workflow-step p {
+  color: rgba(244, 244, 247, 0.7);
+}
+
 .admin {
   background: rgba(18, 16, 34, 0.88);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -1207,6 +1387,20 @@ section {
   color: rgba(244, 244, 247, 0.6);
 }
 
+.admin-beat-card__licenses {
+  list-style: none;
+  padding-left: 0;
+  margin: 4px 0 0;
+  display: grid;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: rgba(244, 244, 247, 0.7);
+}
+
+.admin-beat-card__licenses strong {
+  color: var(--accent-gold);
+}
+
 @media (max-width: 960px) {
   .navbar {
     flex-wrap: wrap;
@@ -1248,6 +1442,17 @@ section {
 
   .hero-actions {
     justify-content: center;
+  }
+
+  .panel-hero,
+  .services-hero {
+    text-align: center;
+    padding: 120px 6vw 72px;
+  }
+
+  .panel-hero__content,
+  .services-hero__content {
+    justify-items: center;
   }
 
   .navbar {

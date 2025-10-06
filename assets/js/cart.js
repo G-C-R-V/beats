@@ -322,6 +322,94 @@
     return parts.join(" | ");
   };
 
+  const applyLicenseSelection = (card, button) => {
+    const select = card.querySelector("[data-license-selector]");
+    if (!select) {
+      const meta = collectBeatMeta(card);
+      if (meta) {
+        button.dataset.itemMeta = meta;
+      }
+      return;
+    }
+
+    const priceTarget =
+      card.querySelector("[data-license-price-target]") ||
+      card.querySelector(".beat-price");
+    const licenseTarget =
+      card.querySelector("[data-license-label-target]") ||
+      card.querySelector(".beat-license");
+    const filesTarget = card.querySelector("[data-license-files-target]");
+
+    const updateFromSelection = () => {
+      const option = select.selectedOptions[0];
+      if (!option) {
+        return;
+      }
+
+      const price = Number.parseFloat(option.dataset.licensePrice);
+      const licenseName = option.dataset.licenseName || option.textContent.trim();
+      const filesRaw = option.dataset.licenseFiles;
+      let filesList = [];
+      if (filesRaw) {
+        try {
+          filesList = JSON.parse(filesRaw);
+        } catch (error) {
+          filesList = filesRaw
+            .split(/[,;\n]/)
+            .map((item) => item.trim())
+            .filter(Boolean);
+        }
+      }
+
+      if (Number.isFinite(price) && priceTarget) {
+        priceTarget.textContent = `${price} USD`;
+        button.dataset.itemPrice = String(price);
+      }
+
+      if (licenseTarget && licenseName) {
+        licenseTarget.textContent = `Licencia ${licenseName}`;
+      }
+
+      if (filesTarget) {
+        const defaultText = filesTarget.dataset.defaultText || filesTarget.textContent;
+        filesTarget.textContent = filesList.length
+          ? `Incluye: ${filesList.join(", ")}`
+          : defaultText;
+      }
+
+      const title =
+        button.dataset.itemTitle ||
+        card.querySelector("h3")?.textContent ||
+        card.querySelector("h4")?.textContent ||
+        "beat";
+      const baseId =
+        card.dataset.itemIdBase ||
+        button.dataset.itemIdBase ||
+        card.dataset.customBeat ||
+        `beat-${slugify(title)}`;
+
+      if (baseId) {
+        card.dataset.itemIdBase = baseId;
+        button.dataset.itemIdBase = baseId;
+        button.dataset.itemId = `${baseId}-${option.value}`;
+      }
+
+      const meta = collectBeatMeta(card);
+      if (meta) {
+        button.dataset.itemMeta = meta;
+      } else if (licenseName) {
+        button.dataset.itemMeta = `Licencia ${licenseName}`;
+      }
+    };
+
+    if (!select.dataset.cartBound) {
+      select.addEventListener("change", updateFromSelection);
+      select.dataset.cartBound = "true";
+    }
+
+    updateFromSelection();
+  };
+
   const getItemFromTrigger = (button) => {
     const card = button.closest(".beat-card, .service-card, .combo-card");
     const type =
@@ -404,20 +492,24 @@
       }
 
       const title = card.querySelector("h3")?.textContent?.trim();
-      if (title && !button.dataset.itemTitle) {
+      if (title) {
         button.dataset.itemTitle = title;
       }
 
       const priceText = card.querySelector(".beat-price")?.textContent || "";
       const parsedPrice = parsePrice(priceText);
-      if (Number.isFinite(parsedPrice) && !button.dataset.itemPrice) {
+      if (Number.isFinite(parsedPrice)) {
         button.dataset.itemPrice = String(parsedPrice);
       }
 
-      if (!button.dataset.itemId) {
-        const slug = slugify(title || `beat-${index}`);
-        button.dataset.itemId = `beat-${slug || index}`;
-      }
+      const baseId =
+        card.dataset.itemIdBase ||
+        button.dataset.itemIdBase ||
+        card.dataset.customBeat ||
+        `beat-${slugify(title || `beat-${index}`)}`;
+      card.dataset.itemIdBase = baseId;
+      button.dataset.itemIdBase = baseId;
+      button.dataset.itemId = baseId;
 
       if (!button.dataset.itemCover) {
         const cover = card.querySelector("img")?.getAttribute("src");
@@ -426,10 +518,7 @@
         }
       }
 
-      const meta = collectBeatMeta(card);
-      if (meta && !button.dataset.itemMeta) {
-        button.dataset.itemMeta = meta;
-      }
+      applyLicenseSelection(card, button);
 
       button.textContent = "Agregar al carrito";
     });

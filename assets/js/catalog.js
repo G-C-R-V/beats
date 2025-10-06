@@ -13,7 +13,8 @@
       license: "Standard",
       cover: "assets/img/beat1.webp",
       audio: "assets/audio/neon-nights-preview.mp3",
-      releaseDate: "2025-09-05"
+      releaseDate: "2025-09-05",
+      files: ["MP3 HQ", "WAV"]
     },
     {
       id: "under-pleasure",
@@ -24,7 +25,8 @@
       license: "Premium",
       cover: "assets/img/beat2.webp",
       audio: "assets/audio/under-pleasure-preview.mp3",
-      releaseDate: "2025-08-18"
+      releaseDate: "2025-08-18",
+      files: ["MP3 HQ", "WAV", "STEMS"]
     },
     {
       id: "dreaming",
@@ -35,7 +37,8 @@
       license: "Standard",
       cover: "assets/img/beat3.webp",
       audio: "assets/audio/dreaming-preview.mp3",
-      releaseDate: "2025-07-22"
+      releaseDate: "2025-07-22",
+      files: ["MP3 HQ", "WAV"]
     },
     {
       id: "rappers-3",
@@ -46,7 +49,8 @@
       license: "Premium",
       cover: "assets/img/beat4.webp",
       audio: "assets/audio/rappers-3-preview.mp3",
-      releaseDate: "2025-06-30"
+      releaseDate: "2025-06-30",
+      files: ["MP3 HQ", "WAV", "STEMS"]
     },
     {
       id: "night-shift",
@@ -57,7 +61,8 @@
       license: "Exclusiva",
       cover: "assets/img/beat1.webp",
       audio: "assets/audio/night-shift-preview.mp3",
-      releaseDate: "2025-09-22"
+      releaseDate: "2025-09-22",
+      files: ["MP3 HQ", "WAV", "STEMS", "Trackouts"]
     },
     {
       id: "velvet-lights",
@@ -68,7 +73,8 @@
       license: "Premium",
       cover: "assets/img/beat2.webp",
       audio: "assets/audio/velvet-lights-preview.mp3",
-      releaseDate: "2025-05-14"
+      releaseDate: "2025-05-14",
+      files: ["MP3 HQ", "WAV", "STEMS"]
     },
     {
       id: "golden-hour",
@@ -79,7 +85,8 @@
       license: "Standard",
       cover: "assets/img/beat3.webp",
       audio: "assets/audio/golden-hour-preview.mp3",
-      releaseDate: "2025-08-02"
+      releaseDate: "2025-08-02",
+      files: ["MP3 HQ", "WAV"]
     },
     {
       id: "skyline",
@@ -90,9 +97,31 @@
       license: "Exclusiva",
       cover: "assets/img/beat4.webp",
       audio: "assets/audio/skyline-preview.mp3",
-      releaseDate: "2025-04-08"
+      releaseDate: "2025-04-08",
+      files: ["MP3 HQ", "WAV", "STEMS", "Trackouts"]
     }
-  ];
+  ].map((beat) => {
+    const files = Array.isArray(beat.files) ? beat.files : [];
+    const licenseName = beat.license || "Standard";
+
+    return {
+      ...beat,
+      preview: beat.audio,
+      previewName: beat.audio ? `${beat.id}-preview.mp3` : "",
+      previewType: "audio/mpeg",
+      audioType: "audio/mpeg",
+      licenses: [
+        {
+          id: `${beat.id}-${licenseName.toLowerCase()}`,
+          name: licenseName,
+          price: beat.price,
+          files,
+          package: "",
+          packageName: ""
+        }
+      ]
+    };
+  });
 
   let beatsCatalog = baseCatalog.slice();
 
@@ -104,6 +133,134 @@
     sort: document.getElementById("sortFilter"),
     emptyMessage: document.getElementById("emptyCatalogMessage"),
     form: document.getElementById("catalogFilters")
+  };
+
+  const parseFiles = (value) => {
+    if (!value) {
+      return [];
+    }
+
+    return String(value)
+      .split(/[\n,]/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  };
+
+  const escapeAttribute = (value) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  const normaliseLicense = (
+    license,
+    fallbackName,
+    fallbackPrice,
+    fallbackFiles = []
+  ) => {
+    if (!license || typeof license !== "object") {
+      if (!fallbackName) {
+        return null;
+      }
+
+      const price = Number.parseFloat(fallbackPrice);
+      if (!Number.isFinite(price) || price <= 0) {
+        return null;
+      }
+
+      const files = Array.isArray(fallbackFiles)
+        ? fallbackFiles
+        : parseFiles(fallbackFiles);
+
+      return {
+        id: fallbackName.toLowerCase(),
+        name: fallbackName,
+        price: Number(price.toFixed(2)),
+        files,
+        package: "",
+        packageName: ""
+      };
+    }
+
+    const name = license.name || fallbackName || license.id || "Standard";
+    const price = Number.parseFloat(license.price);
+    if (!name || !Number.isFinite(price) || price <= 0) {
+      return null;
+    }
+
+    const files = Array.isArray(license.files)
+      ? license.files
+      : parseFiles(license.files);
+
+    return {
+      id: license.id || name.toLowerCase(),
+      name,
+      price: Number(price.toFixed(2)),
+      files,
+      package: license.package || "",
+      packageName: license.packageName || ""
+    };
+  };
+
+  const normaliseBeat = (rawBeat) => {
+    if (!rawBeat || typeof rawBeat !== "object") {
+      return null;
+    }
+
+    const baseFiles = Array.isArray(rawBeat.files)
+      ? rawBeat.files
+      : parseFiles(rawBeat.files);
+    const fallbackLicenseName = rawBeat.license || "Standard";
+    const fallbackPrice = rawBeat.price;
+
+    const rawLicenses = Array.isArray(rawBeat.licenses)
+      ? rawBeat.licenses
+      : [];
+
+    const licenses = rawLicenses
+      .map((entry) =>
+        normaliseLicense(entry, fallbackLicenseName, fallbackPrice, baseFiles)
+      )
+      .filter(Boolean);
+
+    if (!licenses.length) {
+      const fallback = normaliseLicense(
+        null,
+        fallbackLicenseName,
+        fallbackPrice,
+        baseFiles
+      );
+      if (fallback) {
+        licenses.push(fallback);
+      }
+    }
+
+    const defaultLicense = licenses[0] || null;
+    const combinedFiles = Array.from(
+      new Set([...(baseFiles || []), ...(defaultLicense?.files || [])])
+    );
+    const preview = rawBeat.preview || rawBeat.audio || "";
+
+    return {
+      ...rawBeat,
+      price: defaultLicense?.price || rawBeat.price || 0,
+      license: defaultLicense?.name || fallbackLicenseName,
+      licenses,
+      files: combinedFiles,
+      preview,
+      previewType: rawBeat.previewType || rawBeat.audioType || "",
+      previewName: rawBeat.previewName || rawBeat.audioName || "",
+      audio: preview,
+      audioType: rawBeat.previewType || rawBeat.audioType || "",
+      cover: rawBeat.cover || "assets/img/beat1.webp",
+      mood:
+        rawBeat.mood ||
+        `${(rawBeat.genre || "personalizado").charAt(0).toUpperCase()}${(
+          rawBeat.genre || "personalizado"
+        ).slice(1)} · Beat personalizado`,
+      releaseDate: rawBeat.releaseDate || new Date().toISOString()
+    };
   };
 
   if (!selectors.container || !selectors.form) {
@@ -128,28 +285,9 @@
       return [];
     }
 
-    return stored.map((beat) => {
-      const files = Array.isArray(beat.files) ? beat.files : [];
-      return {
-        id: beat.id || `custom-${Date.now()}`,
-        title: beat.title || "Beat personalizado",
-        genre: beat.genre || "personalizado",
-        mood:
-          beat.mood ||
-          `${(beat.genre || "personalizado")
-            .charAt(0)
-            .toUpperCase()}${(beat.genre || "personalizado").slice(
-            1
-          )} · Beat personalizado`,
-        price: Number.parseFloat(beat.price) || 0,
-        license: beat.license || "Standard",
-        cover: beat.cover || "assets/img/beat1.webp",
-        audio: beat.audio || "",
-        releaseDate: beat.releaseDate || new Date().toISOString(),
-        offer: beat.offer || "",
-        files
-      };
-    });
+    return stored
+      .map((beat) => normaliseBeat(beat))
+      .filter((beat) => Boolean(beat));
   };
 
   const refreshCatalogSource = (customBeats = null) => {
@@ -181,36 +319,67 @@
     article.dataset.price = String(beat.price);
     article.dataset.date = beat.releaseDate;
     article.dataset.license = (beat.license || "licencia").toLowerCase();
+    article.dataset.itemIdBase = beat.id;
+    article.dataset.itemId = beat.id;
+
+    const licenses = Array.isArray(beat.licenses) ? beat.licenses : [];
+    const defaultLicense = licenses[0] || null;
+    const files = Array.isArray(beat.files) ? beat.files : [];
+    const filesDefaultText = files.length
+      ? `Incluye: ${files.join(", ")}`
+      : "Archivos sujetos a la licencia seleccionada.";
+    const previewSource = beat.preview || beat.audio || "";
+    const previewType = beat.previewType || beat.audioType || "audio/mpeg";
+
+    const licenseOptionsMarkup = licenses
+      .map((license, index) => {
+        const optionId = license.id || `licencia-${index}`;
+        const filesAttribute = escapeAttribute(
+          JSON.stringify(Array.isArray(license.files) ? license.files : [])
+        );
+        return `<option value="${optionId}" data-license-price="${license.price}" data-license-name="${escapeAttribute(
+          license.name
+        )}" data-license-files="${filesAttribute}">${license.name} - ${license.price} USD</option>`;
+      })
+      .join("\n");
 
     const offerMarkup = beat.offer
       ? `  <p class="beat-offer">${beat.offer}</p>`
       : "";
-    const filesMarkup =
-      Array.isArray(beat.files) && beat.files.length
-        ? `  <p class="beat-files">Incluye: ${beat.files.join(", ")}</p>`
-        : "";
 
     article.innerHTML = [
       `<img src="${beat.cover}" alt="Portada del beat ${beat.title}" class="beat-cover" />`,
       '<div class="beat-info">',
       `  <h3>${beat.title}</h3>`,
       `  <p class="beat-genre">${beat.mood}</p>`,
-      beat.audio
+      `  <p class="beat-files" data-license-files-target data-default-text="${escapeAttribute(
+        filesDefaultText
+      )}">${filesDefaultText}</p>`,
+      previewSource
         ? [
             '  <audio controls preload="none" class="beat-player">',
-            `    <source src="${beat.audio}" type="audio/mpeg" />`,
+            `    <source src="${previewSource}" type="${previewType}" />`,
             "    Tu navegador no soporta la reproducci&oacute;n de audio.",
             "  </audio>"
           ].join("\n")
         : "",
       '  <div class="beat-meta">',
-      `    <span class="beat-price">${beat.price} USD</span>`,
-      `    <span class="beat-license">Licencia ${beat.license}</span>`,
+      `    <span class="beat-price" data-license-price-target>${defaultLicense?.price || beat.price} USD</span>`,
+      `    <span class="beat-license" data-license-label-target>Licencia ${defaultLicense?.name || beat.license}</span>`,
       "  </div>",
+      licenseOptionsMarkup
+        ? [
+            '  <div class="beat-license-control">',
+            `    <label class="beat-license-control__label" for="license-${beat.id}">Licencia</label>`,
+            `    <select class="beat-license-control__select" id="license-${beat.id}" data-license-selector data-beat-id="${beat.id}">`,
+            licenseOptionsMarkup,
+            "    </select>",
+            "  </div>"
+          ].join("\n")
+        : "",
       offerMarkup,
-      filesMarkup,
       `  <p class="beat-date">Subido el ${formatDate(beat.releaseDate)}</p>`,
-      `  <button class="btn tertiary" type="button" data-add-to-cart data-item-id="${beat.id}" data-item-type="beat" data-item-price="${beat.price}" data-item-cover="${beat.cover}">Agregar al carrito</button>`,
+      `  <button class="btn tertiary" type="button" data-add-to-cart data-item-id="${beat.id}" data-item-type="beat" data-item-price="${defaultLicense?.price || beat.price}" data-item-cover="${beat.cover}">Agregar al carrito</button>`,
       "</div>"
     ]
       .filter(Boolean)
