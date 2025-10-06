@@ -29,7 +29,7 @@
         </div>
         <ul class="nav-links">
           <li><a href="./catalogo.html">Catálogo</a></li>
-          <li><a href="#services">Servicios</a></li>
+          <li><a href="./servicios.html">Servicios</a></li>
           <li><a href="#value">Valor</a></li>
           <li><a href="#offer">Oferta</a></li>
           <li><a href="#licenses">Licencias</a></li>
@@ -54,7 +54,7 @@
             <button
               class="nav-auth nav-auth--panel"
               type="button"
-              data-auth-action="open-panel"
+              data-auth-action="go-panel"
             >
               Panel admin
             </button>
@@ -519,104 +519,6 @@
         </div>
       </section>
 
-      <section class="admin" id="adminPanel" hidden>
-        <div class="section-header">
-          <h2>Panel de beats</h2>
-          <p>
-            Solo los administradores pueden registrar nuevas publicaciones en el
-            catalogo.
-          </p>
-        </div>
-        <div class="admin-wrapper">
-          <form class="admin-form" id="beatForm" autocomplete="off">
-            <div class="admin-form__grid">
-              <label class="form-field">
-                <span class="form-label">Nombre del beat</span>
-                <input
-                  type="text"
-                  id="beatTitle"
-                  name="title"
-                  required
-                  placeholder="Ej: Sunset Drive"
-                />
-              </label>
-              <label class="form-field">
-                <span class="form-label">Categoria</span>
-                <select id="beatCategory" name="category" required>
-                  <option value="">Selecciona una opcion</option>
-                  <option value="trap">Trap</option>
-                  <option value="rap">Rap</option>
-                  <option value="reggaeton">Reggaeton</option>
-                  <option value="rnb">R&B</option>
-                  <option value="drill">Drill</option>
-                  <option value="afrobeat">Afrobeat</option>
-                  <option value="exclusiva">Exclusiva</option>
-                </select>
-              </label>
-              <label class="form-field">
-                <span class="form-label">Precio (USD)</span>
-                <input
-                  type="number"
-                  id="beatPrice"
-                  name="price"
-                  min="1"
-                  step="1"
-                  required
-                  placeholder="Ej: 40"
-                />
-              </label>
-              <label class="form-field">
-                <span class="form-label">Oferta</span>
-                <input
-                  type="text"
-                  id="beatOffer"
-                  name="offer"
-                  placeholder="Ej: 2x1 hasta fin de mes"
-                />
-              </label>
-              <label class="form-field form-field--full">
-                <span class="form-label">Archivos incluidos</span>
-                <textarea
-                  id="beatFiles"
-                  name="files"
-                  rows="3"
-                  placeholder="MP3 HQ, WAV, Stems"
-                ></textarea>
-              </label>
-              <label class="form-field form-field--full">
-                <span class="form-label">Imagen del beat</span>
-                <input
-                  type="file"
-                  id="beatImage"
-                  name="image"
-                  accept="image/*"
-                  required
-                />
-              </label>
-            </div>
-            <button class="btn primary" type="submit">Guardar beat</button>
-            <p class="form-helper">
-              La imagen y los datos se guardan localmente en este navegador.
-            </p>
-            <div class="form-feedback" id="beatFormMessage" aria-live="polite"></div>
-          </form>
-        </div>
-        <div class="admin-beats">
-          <h3>Beats creados</h3>
-          <p class="admin-beats__note">
-            Los beats que cargues apareceran inmediatamente en el catalogo
-            publico.
-          </p>
-          <div class="admin-beats__empty" id="adminBeatsEmpty">
-            Todavia no agregaste nuevos beats.
-          </div>
-          <div
-            class="admin-beats__grid"
-            data-custom-beats-target="admin"
-            id="adminBeatsContainer"
-          ></div>
-        </div>
-      </section>
     </main>
 
     <footer class="footer" id="contact">

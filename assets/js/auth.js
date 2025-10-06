@@ -65,7 +65,13 @@
 
   const getCustomBeats = () => {
     const beats = safeJSONParse(localStorage.getItem(STORAGE_KEYS.beats), []);
-    return Array.isArray(beats) ? beats : [];
+    if (!Array.isArray(beats)) {
+      return [];
+    }
+
+    return beats
+      .map((beat) => normaliseBeat(beat))
+      .filter((beat) => Boolean(beat));
   };
 
   const saveCustomBeats = (beats) => {
@@ -113,6 +119,130 @@
       .filter(Boolean);
   };
 
+  const escapeAttribute = (value) =>
+    String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  const normaliseLicense = (
+    license,
+    fallbackName,
+    fallbackPrice,
+    fallbackFiles = []
+  ) => {
+    if (!license || typeof license !== "object") {
+      if (!fallbackName) {
+        return null;
+      }
+
+      const price = Number.parseFloat(fallbackPrice);
+      if (!Number.isFinite(price) || price <= 0) {
+        return null;
+      }
+
+      const files = Array.isArray(fallbackFiles)
+        ? fallbackFiles
+        : parseFiles(fallbackFiles);
+
+      return {
+        id: fallbackName.toLowerCase(),
+        name: fallbackName,
+        price: Number(price.toFixed(2)),
+        files,
+        package: "",
+        packageName: ""
+      };
+    }
+
+    const name = license.name || fallbackName || capitalize(license.id || "");
+    const price = Number.parseFloat(license.price);
+    if (!name || !Number.isFinite(price) || price <= 0) {
+      return null;
+    }
+
+    const files = Array.isArray(license.files)
+      ? license.files
+      : parseFiles(license.files);
+
+    return {
+      id: license.id || name.toLowerCase(),
+      name,
+      price: Number(price.toFixed(2)),
+      files,
+      package: license.package || "",
+      packageName: license.packageName || ""
+    };
+  };
+
+  const normaliseBeat = (rawBeat) => {
+    if (!rawBeat || typeof rawBeat !== "object") {
+      return null;
+    }
+
+    const baseFiles = Array.isArray(rawBeat.files)
+      ? rawBeat.files
+      : parseFiles(rawBeat.files);
+    const fallbackLicenseName = rawBeat.license || "Standard";
+    const fallbackPrice = rawBeat.price;
+
+    const rawLicenses = Array.isArray(rawBeat.licenses)
+      ? rawBeat.licenses
+      : [];
+
+    const licenses = rawLicenses
+      .map((entry) =>
+        normaliseLicense(entry, fallbackLicenseName, fallbackPrice, baseFiles)
+      )
+      .filter(Boolean);
+
+    if (!licenses.length) {
+      const fallback = normaliseLicense(
+        null,
+        fallbackLicenseName,
+        fallbackPrice,
+        baseFiles
+      );
+      if (fallback) {
+        licenses.push(fallback);
+      }
+    }
+
+    const defaultLicense = licenses[0] || null;
+    const combinedFiles = Array.from(
+      new Set([...(baseFiles || []), ...(defaultLicense?.files || [])])
+    );
+    const preview = rawBeat.preview || rawBeat.audio || "";
+
+    return {
+      ...rawBeat,
+      id:
+        rawBeat.id ||
+        (typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `beat-${Date.now()}`),
+      title: rawBeat.title || "Beat personalizado",
+      genre: rawBeat.genre || "personalizado",
+      price: defaultLicense?.price || 0,
+      license: defaultLicense?.name || fallbackLicenseName,
+      licenses,
+      files: combinedFiles,
+      cover: rawBeat.cover || "assets/img/beat1.webp",
+      offer: rawBeat.offer || "",
+      createdBy: rawBeat.createdBy || "",
+      releaseDate: rawBeat.releaseDate || new Date().toISOString(),
+      mood:
+        rawBeat.mood ||
+        `${capitalize(rawBeat.genre || "personalizado")} · Beat personalizado`,
+      preview,
+      previewType: rawBeat.previewType || rawBeat.audioType || "",
+      previewName: rawBeat.previewName || rawBeat.audioName || "",
+      audio: preview,
+      audioType: rawBeat.previewType || rawBeat.audioType || ""
+    };
+  };
+
   const readFileAsDataURL = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -120,6 +250,28 @@
       reader.onerror = () => reject(new Error("No se pudo leer el archivo"));
       reader.readAsDataURL(file);
     });
+
+  const toggleLicenseFields = (item, shouldShow) => {
+    if (!item) {
+      return;
+    }
+
+    const body = item.querySelector("[data-license-fields]");
+    if (body) {
+      body.classList.toggle("is-hidden", !shouldShow);
+    }
+  };
+
+  const cacheLicenseControls = () => {
+    selectors.licenseItems = selectors.beatForm
+      ? Array.from(selectors.beatForm.querySelectorAll("[data-license-item]"))
+      : [];
+
+    selectors.licenseItems.forEach((item) => {
+      const toggle = item.querySelector("[data-license-toggle]");
+      toggleLicenseFields(item, Boolean(toggle?.checked));
+    });
+  };
 
   const cacheDom = () => {
     selectors.authModal = document.getElementById("authModal");
@@ -130,18 +282,20 @@
     selectors.navUserMenu = document.getElementById("navUserMenu");
     selectors.navUserName = document.getElementById("navUserName");
     selectors.navPanelButton = selectors.navUserMenu
-      ? selectors.navUserMenu.querySelector("[data-auth-action='open-panel']")
+      ? selectors.navUserMenu.querySelector("[data-auth-action='go-panel']")
       : null;
     selectors.logoutButton = selectors.navUserMenu
       ? selectors.navUserMenu.querySelector("[data-auth-action='logout']")
       : null;
     selectors.adminPanel = document.getElementById("adminPanel");
+    selectors.adminLocked = document.getElementById("adminLockedNotice");
     selectors.beatForm = document.getElementById("beatForm");
     selectors.beatFormMessage = document.getElementById("beatFormMessage");
     selectors.adminBeatsContainer = document.getElementById(
       "adminBeatsContainer"
     );
     selectors.adminBeatsEmpty = document.getElementById("adminBeatsEmpty");
+    cacheLicenseControls();
   };
 
   const toggleClass = (element, className, shouldAdd) => {
@@ -250,12 +404,15 @@
   };
 
   const updateAdminPanelVisibility = () => {
-    if (!selectors.adminPanel) {
-      return;
+    const shouldShow = isAdmin();
+
+    if (selectors.adminPanel) {
+      selectors.adminPanel.hidden = !shouldShow;
     }
 
-    const shouldShow = isAdmin();
-    selectors.adminPanel.hidden = !shouldShow;
+    if (selectors.adminLocked) {
+      selectors.adminLocked.hidden = shouldShow;
+    }
   };
 
   const formatDate = (isoDate) => {
@@ -288,11 +445,22 @@
     const files = Array.isArray(beat.files) ? beat.files : [];
     const formattedFiles = files.join(", ");
     const offer = beat.offer || "";
+    const licenses = Array.isArray(beat.licenses) ? beat.licenses : [];
+    const defaultLicense = licenses[0] || null;
 
     if (context === "admin") {
       const card = document.createElement("article");
       card.className = "admin-beat-card";
       card.dataset.customBeat = beat.id;
+      const licenseSummary = licenses
+        .map((license) => {
+          const licenseFiles = Array.isArray(license.files)
+            ? license.files.join(", ")
+            : "";
+          const fileText = licenseFiles ? ` · ${licenseFiles}` : "";
+          return `<li><strong>${license.name}</strong> · ${license.price} USD${fileText}</li>`;
+        })
+        .join("\n");
       card.innerHTML = [
         `<div class="admin-beat-card__cover"><img src="${cover}" alt="Portada del beat ${beat.title}" /></div>`,
         '<div class="admin-beat-card__body">',
@@ -303,6 +471,9 @@
         offer ? `  <p class="admin-beat-card__offer">${offer}</p>` : "",
         formattedFiles
           ? `  <p class="admin-beat-card__files">Incluye: ${formattedFiles}</p>`
+          : "",
+        licenseSummary
+          ? `  <ul class="admin-beat-card__licenses">${licenseSummary}</ul>`
           : "",
         `  <p class="admin-beat-card__date">Publicado el ${formatDate(
           beat.releaseDate
@@ -317,24 +488,67 @@
     const article = document.createElement("article");
     article.className = "beat-card beat-card--custom";
     article.dataset.customBeat = beat.id;
+    article.dataset.itemIdBase = beat.id;
+    article.dataset.itemId = beat.id;
     article.dataset.genre = beat.genre || "personalizado";
     article.dataset.license = "licencia";
 
     const mood = beat.mood || `${capitalize(beat.genre)} · Beat personalizado`;
+    const previewSource = beat.preview || beat.audio || "";
+    const previewType = beat.previewType || beat.audioType || "audio/mpeg";
+    const defaultPrice = defaultLicense?.price || beat.price || 0;
+    const defaultLicenseLabel = defaultLicense
+      ? `Licencia ${defaultLicense.name}`
+      : `Licencia ${beat.license || "Standard"}`;
+    const filesDefaultText = formattedFiles
+      ? `Incluye: ${formattedFiles}`
+      : "Archivos sujetos a la licencia seleccionada.";
+
+    const licenseOptionsMarkup = licenses
+      .map((license, index) => {
+        const optionId = license.id || `licencia-${index}`;
+        const filesAttribute = escapeAttribute(
+          JSON.stringify(Array.isArray(license.files) ? license.files : [])
+        );
+        return `<option value="${optionId}" data-license-price="${license.price}" data-license-name="${escapeAttribute(
+          license.name
+        )}" data-license-files="${filesAttribute}">${license.name} - ${license.price} USD</option>`;
+      })
+      .join("\n");
 
     article.innerHTML = [
       `<img src="${cover}" alt="Portada del beat ${beat.title}" class="beat-cover" />`,
       '<div class="beat-info">',
       `  <h3>${beat.title}</h3>`,
       `  <p class="beat-genre">${mood}</p>`,
-      formattedFiles ? `  <p class="beat-files">Incluye: ${formattedFiles}</p>` : "",
+      `  <p class="beat-files" data-license-files-target data-default-text="${escapeAttribute(
+        filesDefaultText
+      )}">${filesDefaultText}</p>`,
+      previewSource
+        ? [
+            '  <audio controls preload="none" class="beat-player">',
+            `    <source src="${previewSource}" type="${previewType}" />`,
+            "    Tu navegador no soporta la reproducción de audio.",
+            "  </audio>"
+          ].join("\n")
+        : "",
       '  <div class="beat-meta">',
-      `    <span class="beat-price">${beat.price} USD</span>`,
-      `    <span class="beat-license">Licencia ${beat.license}</span>`,
+      `    <span class="beat-price" data-license-price-target>${defaultPrice} USD</span>`,
+      `    <span class="beat-license" data-license-label-target>${defaultLicenseLabel}</span>`,
       "  </div>",
+      licenseOptionsMarkup
+        ? [
+            '  <div class="beat-license-control">',
+            `    <label class="beat-license-control__label" for="license-${beat.id}">Licencia</label>`,
+            `    <select class="beat-license-control__select" id="license-${beat.id}" data-license-selector data-beat-id="${beat.id}">`,
+            licenseOptionsMarkup,
+            "    </select>",
+            "  </div>"
+          ].join("\n")
+        : "",
       offer ? `  <p class="beat-offer">${offer}</p>` : "",
       `  <p class="beat-date">Subido el ${formatDate(beat.releaseDate)}</p>`,
-      `  <button class="btn tertiary" type="button" data-add-to-cart data-item-id="${beat.id}" data-item-type="beat" data-item-price="${beat.price}" data-item-cover="${cover}" data-item-title="${beat.title}">Agregar al carrito</button>`,
+      `  <button class="btn tertiary" type="button" data-add-to-cart data-item-id="${beat.id}" data-item-type="beat" data-item-price="${defaultPrice}" data-item-cover="${cover}" data-item-title="${beat.title}">Agregar al carrito</button>`,
       "</div>"
     ]
       .filter(Boolean)
@@ -487,12 +701,23 @@
   };
 
   const scrollToAdminPanel = () => {
-    if (!selectors.adminPanel) {
+    const onPanelPage = /panel\.html$/i.test(window.location.pathname);
+
+    if (!onPanelPage) {
+      window.location.href = "panel.html";
       return;
     }
 
-    selectors.adminPanel.hidden = false;
-    selectors.adminPanel.scrollIntoView({ behavior: "smooth" });
+    if (isAdmin() && selectors.adminPanel) {
+      selectors.adminPanel.hidden = false;
+      selectors.adminPanel.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    if (selectors.adminLocked) {
+      selectors.adminLocked.hidden = false;
+      selectors.adminLocked.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleBeatFormSubmit = async (event) => {
@@ -504,25 +729,88 @@
 
     const form = event.currentTarget;
     const submitButton = form.querySelector("button[type='submit']");
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
 
     const title = form.title.value.trim();
     const genre = form.category.value;
-    const price = Number.parseFloat(form.price.value);
     const offer = form.offer.value.trim();
-    const files = parseFiles(form.files.value);
+    const descriptionFiles = parseFiles(form.files.value);
     const imageFile = form.image.files[0];
+    const previewFile = form.preview.files[0];
 
-    if (!title || !genre || !Number.isFinite(price) || price <= 0 || !imageFile) {
-      if (selectors.beatFormMessage) {
-        selectors.beatFormMessage.textContent =
-          "Complet� todos los campos obligatorios.";
-        selectors.beatFormMessage.dataset.type = "error";
+    const licenseItems = Array.from(
+      form.querySelectorAll("[data-license-item]")
+    );
+
+    const licenses = [];
+    let validationMessage = "";
+
+    for (const item of licenseItems) {
+      const toggle = item.querySelector("[data-license-toggle]");
+      if (!toggle || !toggle.checked) {
+        continue;
       }
-      return;
+
+      const licenseName =
+        item.dataset.licenseName || capitalize(item.dataset.licenseItem || "");
+      const priceInput = item.querySelector("[data-license-price]");
+      const filesInput = item.querySelector("[data-license-files]");
+      const packageInput = item.querySelector("[data-license-package]");
+
+      const priceValue = Number.parseFloat(priceInput?.value);
+      if (!Number.isFinite(priceValue) || priceValue <= 0) {
+        validationMessage = `Define un precio válido para la licencia ${licenseName}.`;
+        break;
+      }
+
+      const packageFile = packageInput?.files?.[0];
+      if (!packageFile) {
+        validationMessage = `Adjunta el paquete de entrega para la licencia ${licenseName}.`;
+        break;
+      }
+
+      try {
+        const packageData = await readFileAsDataURL(packageFile);
+        licenses.push({
+          id:
+            item.dataset.licenseItem ||
+            licenseName.toLowerCase().replace(/\s+/g, "-"),
+          name: licenseName,
+          price: Number(priceValue.toFixed(2)),
+          files: parseFiles(filesInput?.value),
+          package: packageData,
+          packageName: packageFile.name
+        });
+      } catch (error) {
+        validationMessage = `No pudimos procesar el paquete de la licencia ${licenseName}.`;
+        break;
+      }
     }
 
-    if (submitButton) {
-      submitButton.disabled = true;
+    if (!validationMessage && !licenses.length) {
+      validationMessage =
+        "Activa al menos una licencia para publicar el beat.";
+    }
+
+    if (
+      !validationMessage &&
+      (!title || !genre || !imageFile || !previewFile)
+    ) {
+      validationMessage =
+        "Completá todos los campos obligatorios y subí la imagen y preview.";
+    }
+
+    if (validationMessage) {
+      if (selectors.beatFormMessage) {
+        selectors.beatFormMessage.textContent = validationMessage;
+        selectors.beatFormMessage.dataset.type = "error";
+      }
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+      return;
     }
 
     if (selectors.beatFormMessage) {
@@ -531,8 +819,21 @@
     }
 
     try {
-      const cover = await readFileAsDataURL(imageFile);
+      const [cover, preview] = await Promise.all([
+        readFileAsDataURL(imageFile),
+        readFileAsDataURL(previewFile)
+      ]);
+
       const now = new Date().toISOString();
+      const defaultLicense = licenses[0];
+      const combinedFiles = Array.from(
+        new Set([
+          ...descriptionFiles,
+          ...(defaultLicense?.files || [])
+        ])
+      );
+      const previewType = previewFile.type || "audio/mpeg";
+
       const newBeat = {
         id:
           (typeof crypto !== "undefined" && crypto.randomUUID
@@ -540,17 +841,23 @@
             : `beat-${Date.now()}`),
         title,
         genre,
-        price: Number(price.toFixed(2)),
-        license: offer ? "Personalizada" : "Standard",
+        price: defaultLicense?.price || 0,
+        license: defaultLicense?.name || "Standard",
         offer,
-        files,
+        files: combinedFiles,
         cover,
+        preview,
+        previewType,
+        previewName: previewFile.name,
+        licenses,
         createdBy: state.currentUser.email,
         releaseDate: now,
-        mood: files.length
-          ? `${capitalize(genre)} · ${files.join(", ")}`
+        mood: descriptionFiles.length
+          ? `${capitalize(genre)} · ${descriptionFiles.join(", ")}`
           : `${capitalize(genre)} · Beat personalizado`
       };
+      newBeat.audio = newBeat.preview;
+      newBeat.audioType = previewType;
 
       const beats = getCustomBeats();
       beats.push(newBeat);
@@ -559,8 +866,11 @@
       renderCustomBeats();
 
       form.reset();
+      cacheLicenseControls();
+
       if (selectors.beatFormMessage) {
-        selectors.beatFormMessage.textContent = "Beat guardado correctamente.";
+        selectors.beatFormMessage.textContent =
+          "Beat guardado correctamente.";
         selectors.beatFormMessage.dataset.type = "success";
       }
     } catch (error) {
@@ -625,6 +935,15 @@
     if (selectors.navPanelButton) {
       selectors.navPanelButton.addEventListener("click", scrollToAdminPanel);
     }
+
+    selectors.licenseItems?.forEach((item) => {
+      const toggle = item.querySelector("[data-license-toggle]");
+      if (toggle) {
+        toggle.addEventListener("change", () => {
+          toggleLicenseFields(item, toggle.checked);
+        });
+      }
+    });
 
     if (selectors.beatForm) {
       selectors.beatForm.addEventListener("submit", handleBeatFormSubmit);

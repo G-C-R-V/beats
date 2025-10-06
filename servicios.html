@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Servicios de Producción | Beats by Dame6k</title>
+    <meta
+      name="description"
+      content="Reserva sesiones de grabación, mezcla, master y combos especiales con Beats by Dame6k."
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/cart.js" defer></script>
+  </head>
+  <body class="services-page">
+    <header class="services-hero">
+      <nav class="navbar">
+        <div class="brand">
+          <img src="./assets/img/logo.png" alt="Dame6k" class="logo" />
+          <span class="logo">Beats by Dame6k</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="./index.html">Inicio</a></li>
+          <li><a href="./catalogo.html">Catálogo</a></li>
+          <li><a class="is-active" href="./servicios.html">Servicios</a></li>
+          <li><a href="./index.html#licenses">Licencias</a></li>
+          <li><a href="./index.html#contact">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="nav-cta" data-scroll="#services">Ver paquetes</button>
+          <button
+            class="nav-auth"
+            type="button"
+            data-auth-open="login"
+            id="navLoginButton"
+          >
+            Ingresar
+          </button>
+          <div
+            class="nav-user is-hidden"
+            id="navUserMenu"
+            aria-expanded="false"
+          >
+            <span class="nav-user__name" id="navUserName"></span>
+            <button
+              class="nav-auth nav-auth--panel"
+              type="button"
+              data-auth-action="go-panel"
+            >
+              Panel admin
+            </button>
+            <button
+              class="nav-auth nav-auth--logout"
+              type="button"
+              data-auth-action="logout"
+            >
+              Cerrar sesion
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div class="services-hero__content">
+        <h1>Servicios de producción integral</h1>
+        <p>
+          Reserva sesiones de grabación, mezcla y master con un workflow
+          profesional. Elige un combo o arma un plan personalizado según tu
+          proyecto.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#services">Ver servicios</a>
+          <a class="btn secondary" href="./catalogo.html">Explorar beats</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="services" id="services">
+        <div class="section-header">
+          <h2>Servicios de Producción</h2>
+          <p>
+            Optimiza tu proyecto con paquetes flexibles y reserva tu sesión con
+            30% de seña. El resto se abona al entregar.
+          </p>
+        </div>
+        <div class="services-grid base-services">
+          <article class="service-card">
+            <h3>Grabación</h3>
+            <p class="service-price">$15 USD</p>
+            <p class="service-note">
+              Sesión de tracking en estudio híbrido con ingeniero dedicado.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3>Mezcla</h3>
+            <p class="service-price">$35 USD</p>
+            <p class="service-note">
+              Balance tonal, espacial y dinámico listo para streaming.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3>Master</h3>
+            <p class="service-price">$20 USD</p>
+            <p class="service-note">
+              Optimización final para volumen competitivo y claridad global.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3>Beat personalizado</h3>
+            <p class="service-price">$60 USD</p>
+            <p class="service-note">
+              Producción desde cero con feedback en vivo y hasta dos revisiones.
+            </p>
+          </article>
+        </div>
+
+        <div class="combos">
+          <h3>Combos con descuento</h3>
+          <div class="combo-grid">
+            <article class="combo-card">
+              <h4>Grabación + Mezcla</h4>
+              <p class="combo-price">
+                $45 USD <span class="combo-old">$50 USD</span>
+              </p>
+              <p>Ahorra y llévate el track listo para masterizar.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Master</h4>
+              <p class="combo-price">
+                $30 USD <span class="combo-old">$35 USD</span>
+              </p>
+              <p>Ideal para voces, podcasts o demos rápidas.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Mezcla + Master</h4>
+              <p class="combo-price">
+                $50 USD <span class="combo-old">$55 USD</span>
+              </p>
+              <p>Entrega profesional lista para plataformas.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Beat</h4>
+              <p class="combo-price">
+                $45 USD <span class="combo-old">$50 USD</span>
+              </p>
+              <p>Incluye instrumental curado para tu sesión.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Beat + Mezcla + Master</h4>
+              <p class="combo-price">
+                $80 USD <span class="combo-old">$90 USD</span>
+              </p>
+              <p>Paquete listo para lanzar con calidad de sello.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Beat + Mezcla</h4>
+              <p class="combo-price">
+                $75 USD <span class="combo-old">$85 USD</span>
+              </p>
+              <p>Construye tu single con soporte end-to-end.</p>
+            </article>
+            <article class="combo-card highlight">
+              <h4>Producción completa</h4>
+              <p class="combo-price">
+                $110 USD <span class="combo-old">$130 USD</span>
+              </p>
+              <p>
+                Incluye beat exclusivo, grabación, mezcla, master y entrega con
+                licencias personalizadas.
+              </p>
+            </article>
+            <article class="combo-card">
+              <h4>Mix & Master Express</h4>
+              <p class="combo-price">
+                $65 USD <span class="combo-old">$75 USD</span>
+              </p>
+              <p>Entrega en 48 hs con dos rondas de ajustes.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="services services--alt">
+        <div class="section-header">
+          <h2>Flujo de trabajo</h2>
+          <p>
+            Cada servicio incluye asesoría previa, checklist técnico y seguimiento
+            post entrega para asegurar la mejor versión de tu música.
+          </p>
+        </div>
+        <div class="workflow-grid">
+          <article class="workflow-step">
+            <h3>Briefing inicial</h3>
+            <p>
+              Revisamos referencias, tono vocal y objetivos de publicación para
+              definir el plan de acción.
+            </p>
+          </article>
+          <article class="workflow-step">
+            <h3>Sesión guiada</h3>
+            <p>
+              Grabamos con direction coaching y monitoreo constante para captar
+              las mejores tomas.
+            </p>
+          </article>
+          <article class="workflow-step">
+            <h3>Mix & Master</h3>
+            <p>
+              Mezcla híbrida con hardware y plugins premium, seguida de un master
+              competitivo certificado por streaming.
+            </p>
+          </article>
+          <article class="workflow-step">
+            <h3>Entrega final</h3>
+            <p>
+              Recibe versiones MP3, WAV, instrumental y acapella junto a un plan
+              de lanzamiento sugerido.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="contact">
+      <div class="footer-content">
+        <div>
+          <h4>Beats by Dame6k</h4>
+          <p>Email: <a href="mailto:beats@Dame6k.com">beats@dame6k.com</a></p>
+          <p>
+            WhatsApp:
+            <a href="https://wa.me/5491123863488">+54 9 11 2386-3488</a>
+          </p>
+        </div>
+        <div>
+          <h4>Síguenos</h4>
+          <ul class="social-links">
+            <li>
+              <a href="https://instagram.com" target="_blank" rel="noopener"
+                >Instagram</a
+              >
+            </li>
+            <li>
+              <a href="https://youtube.com" target="_blank" rel="noopener"
+                >YouTube</a
+              >
+            </li>
+            <li>
+              <a href="https://spotify.com" target="_blank" rel="noopener"
+                >Spotify</a
+              >
+            </li>
+            <li>
+              <a href="https://soundcloud.com" target="_blank" rel="noopener"
+                >SoundCloud</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <p>© 2025 Beats by Dame6k. Todos los derechos reservados.</p>
+          <a href="./index.html#licenses">Aviso legal</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="auth-modal" id="authModal" aria-hidden="true">
+      <div class="auth-modal__backdrop" data-auth-close></div>
+      <div
+        class="auth-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="authModalTitle"
+      >
+        <button
+          class="auth-modal__close"
+          type="button"
+          aria-label="Cerrar"
+          data-auth-close
+        >
+          &times;
+        </button>
+        <header class="auth-modal__header">
+          <h2 id="authModalTitle">Bienvenido</h2>
+          <p>Ingresa a tu cuenta o registrate para comprar beats y servicios.</p>
+          <div class="auth-tabs" role="tablist">
+            <button
+              class="auth-tab active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-auth-tab="login"
+            >
+              Ingresar
+            </button>
+            <button
+              class="auth-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-auth-tab="register"
+            >
+              Crear cuenta
+            </button>
+          </div>
+        </header>
+        <div class="auth-modal__body">
+          <form class="auth-form" data-auth-panel="login">
+            <label class="form-field">
+              <span class="form-label">Email</span>
+              <input type="email" name="email" placeholder="mail@dominio.com" required />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Contraseña</span>
+              <input type="password" name="password" placeholder="Min. 6 caracteres" required />
+            </label>
+            <button class="btn primary" type="submit">Ingresar</button>
+          </form>
+          <form class="auth-form is-hidden" data-auth-panel="register" aria-hidden="true">
+            <label class="form-field">
+              <span class="form-label">Nombre</span>
+              <input type="text" name="name" placeholder="Tu nombre" required />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Email</span>
+              <input type="email" name="email" placeholder="mail@dominio.com" required />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Contraseña</span>
+              <input type="password" name="password" placeholder="Min. 6 caracteres" required />
+            </label>
+            <button class="btn primary" type="submit">Crear cuenta</button>
+          </form>
+          <div class="form-feedback" id="authFormMessage" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

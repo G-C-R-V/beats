@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Beats | Beats by Dame6k</title>
+    <meta
+      name="description"
+      content="Gestiona beats, previews y licencias exclusivas desde el panel administrativo."
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/cart.js" defer></script>
+  </head>
+  <body class="panel-page">
+    <header class="panel-hero">
+      <nav class="navbar">
+        <div class="brand">
+          <img src="./assets/img/logo.png" alt="Dame6k" class="logo" />
+          <span class="logo">Beats by Dame6k</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="./index.html">Inicio</a></li>
+          <li><a href="./catalogo.html">Catálogo</a></li>
+          <li><a href="./servicios.html">Servicios</a></li>
+          <li><a href="./index.html#licenses">Licencias</a></li>
+          <li><a href="./index.html#contact">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="nav-cta" data-scroll="#adminPanel">Nuevo beat</button>
+          <button
+            class="nav-auth"
+            type="button"
+            data-auth-open="login"
+            id="navLoginButton"
+          >
+            Ingresar
+          </button>
+          <div
+            class="nav-user is-hidden"
+            id="navUserMenu"
+            aria-expanded="false"
+          >
+            <span class="nav-user__name" id="navUserName"></span>
+            <button
+              class="nav-auth nav-auth--panel"
+              type="button"
+              data-auth-action="go-panel"
+            >
+              Panel admin
+            </button>
+            <button
+              class="nav-auth nav-auth--logout"
+              type="button"
+              data-auth-action="logout"
+            >
+              Cerrar sesion
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div class="panel-hero__content">
+        <h1>Panel administrativo</h1>
+        <p>
+          Centraliza la carga de beats, previews de audio y paquetes de licencia.
+          Todo se guarda localmente para que puedas probar la experiencia del
+          cliente final.
+        </p>
+      </div>
+    </header>
+
+    <main class="panel-main">
+      <section class="admin" id="adminPanel" hidden>
+        <div class="section-header">
+          <h2>Registrar un nuevo beat</h2>
+          <p>
+            Completa los datos, sube el arte, la preview de audio y asigna las
+            licencias disponibles para este lanzamiento.
+          </p>
+        </div>
+        <div class="admin-wrapper">
+          <form class="admin-form" id="beatForm" autocomplete="off">
+            <div class="admin-form__grid">
+              <label class="form-field form-field--full">
+                <span class="form-label">Nombre del beat</span>
+                <input
+                  type="text"
+                  id="beatTitle"
+                  name="title"
+                  required
+                  placeholder="Ej: Sunset Drive"
+                />
+              </label>
+              <label class="form-field">
+                <span class="form-label">Categoria</span>
+                <select id="beatCategory" name="category" required>
+                  <option value="">Selecciona una opcion</option>
+                  <option value="trap">Trap</option>
+                  <option value="rap">Rap</option>
+                  <option value="reggaeton">Reggaeton</option>
+                  <option value="rnb">R&B</option>
+                  <option value="drill">Drill</option>
+                  <option value="afrobeat">Afrobeat</option>
+                  <option value="exclusiva">Exclusiva</option>
+                </select>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Oferta</span>
+                <input
+                  type="text"
+                  id="beatOffer"
+                  name="offer"
+                  placeholder="Ej: 2x1 hasta fin de mes"
+                />
+              </label>
+              <label class="form-field">
+                <span class="form-label">Imagen del beat</span>
+                <input
+                  type="file"
+                  id="beatImage"
+                  name="image"
+                  accept="image/*"
+                  required
+                />
+              </label>
+              <label class="form-field">
+                <span class="form-label">Preview (MP3/WAV)</span>
+                <input
+                  type="file"
+                  id="beatPreview"
+                  name="preview"
+                  accept="audio/*"
+                  required
+                />
+              </label>
+              <label class="form-field form-field--full">
+                <span class="form-label">Archivos destacados</span>
+                <textarea
+                  id="beatFiles"
+                  name="files"
+                  rows="3"
+                  placeholder="Describe el mood, BPM u otros detalles clave"
+                ></textarea>
+              </label>
+            </div>
+
+            <fieldset class="license-fieldset">
+              <legend>Licencias disponibles</legend>
+              <p class="form-helper">
+                Activa las licencias que incluye este beat. Cada licencia debe
+                tener un precio, archivos descriptivos y un paquete de entrega.
+              </p>
+              <div class="license-grid">
+                <div
+                  class="license-card"
+                  data-license-item="standard"
+                  data-license-name="Standard"
+                >
+                  <label class="license-card__header">
+                    <input type="checkbox" data-license-toggle />
+                    <span>Licencia Standard</span>
+                  </label>
+                  <div class="license-card__body is-hidden" data-license-fields>
+                    <label class="form-field">
+                      <span class="form-label">Precio (USD)</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="0.01"
+                        data-license-price
+                        placeholder="Ej: 25"
+                      />
+                    </label>
+                    <label class="form-field">
+                      <span class="form-label">Archivos incluidos</span>
+                      <textarea
+                        rows="2"
+                        data-license-files
+                        placeholder="MP3 HQ, WAV"
+                      ></textarea>
+                    </label>
+                    <label class="form-field">
+                      <span class="form-label">Paquete de entrega</span>
+                      <input
+                        type="file"
+                        data-license-package
+                        accept=".zip,.rar,.7z,audio/*"
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="license-card"
+                  data-license-item="premium"
+                  data-license-name="Premium"
+                >
+                  <label class="license-card__header">
+                    <input type="checkbox" data-license-toggle />
+                    <span>Licencia Premium</span>
+                  </label>
+                  <div class="license-card__body is-hidden" data-license-fields>
+                    <label class="form-field">
+                      <span class="form-label">Precio (USD)</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="0.01"
+                        data-license-price
+                        placeholder="Ej: 45"
+                      />
+                    </label>
+                    <label class="form-field">
+                      <span class="form-label">Archivos incluidos</span>
+                      <textarea
+                        rows="2"
+                        data-license-files
+                        placeholder="MP3 HQ, WAV, STEMS"
+                      ></textarea>
+                    </label>
+                    <label class="form-field">
+                      <span class="form-label">Paquete de entrega</span>
+                      <input
+                        type="file"
+                        data-license-package
+                        accept=".zip,.rar,.7z,audio/*"
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="license-card"
+                  data-license-item="exclusiva"
+                  data-license-name="Exclusiva"
+                >
+                  <label class="license-card__header">
+                    <input type="checkbox" data-license-toggle />
+                    <span>Licencia Exclusiva</span>
+                  </label>
+                  <div class="license-card__body is-hidden" data-license-fields>
+                    <label class="form-field">
+                      <span class="form-label">Precio (USD)</span>
+                      <input
+                        type="number"
+                        min="1"
+                        step="0.01"
+                        data-license-price
+                        placeholder="Ej: 120"
+                      />
+                    </label>
+                    <label class="form-field">
+                      <span class="form-label">Archivos incluidos</span>
+                      <textarea
+                        rows="2"
+                        data-license-files
+                        placeholder="MP3 HQ, WAV, STEMS, Trackouts"
+                      ></textarea>
+                    </label>
+                    <label class="form-field">
+                      <span class="form-label">Paquete de entrega</span>
+                      <input
+                        type="file"
+                        data-license-package
+                        accept=".zip,.rar,.7z,audio/*"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <button class="btn primary" type="submit">Guardar beat</button>
+            <p class="form-helper">
+              La información, imágenes y archivos se almacenan en el navegador
+              para propósitos demostrativos.
+            </p>
+            <div class="form-feedback" id="beatFormMessage" aria-live="polite"></div>
+          </form>
+        </div>
+
+        <div class="admin-beats">
+          <h3>Beats cargados recientemente</h3>
+          <p class="admin-beats__note">
+            Las publicaciones aparecen automáticamente en el catálogo público y
+            en la portada del sitio.
+          </p>
+          <div class="admin-beats__empty" id="adminBeatsEmpty">
+            Todavía no agregaste nuevos beats.
+          </div>
+          <div
+            class="admin-beats__grid"
+            data-custom-beats-target="admin"
+            id="adminBeatsContainer"
+          ></div>
+        </div>
+      </section>
+
+      <section class="admin-locked" id="adminLockedNotice" hidden>
+        <div class="admin-locked__content">
+          <h2>Acceso restringido</h2>
+          <p>
+            Debes iniciar sesión con una cuenta de administrador para subir nuevos
+            beats. Usa el botón ingresar para autenticarte.
+          </p>
+          <button class="btn primary" type="button" data-auth-open="login">
+            Ingresar como administrador
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="contact">
+      <div class="footer-content">
+        <div>
+          <h4>Beats by Dame6k</h4>
+          <p>Email: <a href="mailto:beats@Dame6k.com">beats@dame6k.com</a></p>
+          <p>
+            WhatsApp:
+            <a href="https://wa.me/5491123863488">+54 9 11 2386-3488</a>
+          </p>
+        </div>
+        <div>
+          <h4>Síguenos</h4>
+          <ul class="social-links">
+            <li>
+              <a href="https://instagram.com" target="_blank" rel="noopener"
+                >Instagram</a
+              >
+            </li>
+            <li>
+              <a href="https://youtube.com" target="_blank" rel="noopener"
+                >YouTube</a
+              >
+            </li>
+            <li>
+              <a href="https://spotify.com" target="_blank" rel="noopener"
+                >Spotify</a
+              >
+            </li>
+            <li>
+              <a href="https://soundcloud.com" target="_blank" rel="noopener"
+                >SoundCloud</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <p>© 2025 Beats by Dame6k. Todos los derechos reservados.</p>
+          <a href="./index.html#licenses">Aviso legal</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="auth-modal" id="authModal" aria-hidden="true">
+      <div class="auth-modal__backdrop" data-auth-close></div>
+      <div
+        class="auth-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="authModalTitle"
+      >
+        <button
+          class="auth-modal__close"
+          type="button"
+          aria-label="Cerrar"
+          data-auth-close
+        >
+          &times;
+        </button>
+        <header class="auth-modal__header">
+          <h2 id="authModalTitle">Bienvenido</h2>
+          <p>Ingresa a tu cuenta o registrate para comprar beats y servicios.</p>
+          <div class="auth-tabs" role="tablist">
+            <button
+              class="auth-tab active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-auth-tab="login"
+            >
+              Ingresar
+            </button>
+            <button
+              class="auth-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-auth-tab="register"
+            >
+              Crear cuenta
+            </button>
+          </div>
+        </header>
+        <div class="auth-modal__body">
+          <form class="auth-form" data-auth-panel="login">
+            <label class="form-field">
+              <span class="form-label">Email</span>
+              <input type="email" name="email" placeholder="mail@dominio.com" required />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Contraseña</span>
+              <input type="password" name="password" placeholder="Min. 6 caracteres" required />
+            </label>
+            <button class="btn primary" type="submit">Ingresar</button>
+          </form>
+          <form class="auth-form is-hidden" data-auth-panel="register" aria-hidden="true">
+            <label class="form-field">
+              <span class="form-label">Nombre</span>
+              <input type="text" name="name" placeholder="Tu nombre" required />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Email</span>
+              <input type="email" name="email" placeholder="mail@dominio.com" required />
+            </label>
+            <label class="form-field">
+              <span class="form-label">Contraseña</span>
+              <input type="password" name="password" placeholder="Min. 6 caracteres" required />
+            </label>
+            <button class="btn primary" type="submit">Crear cuenta</button>
+          </form>
+          <div class="form-feedback" id="authFormMessage" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
