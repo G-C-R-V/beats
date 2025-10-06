@@ -1,0 +1,775 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beats by Dame6k - Productor Profesional</title>
+    <meta
+      name="description"
+      content="Instrumentales de trap, rap, R&B y drill con mezcla y master listos para lanzar."
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/cart.js" defer></script>
+  </head>
+  <body>
+    <header class="hero" id="home">
+      <nav class="navbar">
+        <div class="brand">
+          <img src="./assets/img/logo.png" alt="Dame6k" class="logo" />
+          <span class="logo">Beats by Dame6k</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="./catalogo.html">Catálogo</a></li>
+          <li><a href="#services">Servicios</a></li>
+          <li><a href="#value">Valor</a></li>
+          <li><a href="#offer">Oferta</a></li>
+          <li><a href="#licenses">Licencias</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="nav-cta" data-scroll="#catalog">Escuchar ahora</button>
+          <button
+            class="nav-auth"
+            type="button"
+            data-auth-open="login"
+            id="navLoginButton"
+          >
+            Ingresar
+          </button>
+          <div
+            class="nav-user is-hidden"
+            id="navUserMenu"
+            aria-expanded="false"
+          >
+            <span class="nav-user__name" id="navUserName"></span>
+            <button
+              class="nav-auth nav-auth--panel"
+              type="button"
+              data-auth-action="open-panel"
+            >
+              Panel admin
+            </button>
+            <button
+              class="nav-auth nav-auth--logout"
+              type="button"
+              data-auth-action="logout"
+            >
+              Cerrar sesion
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div class="hero-content">
+        <div>
+          <p class="hero-overline">Productor Musical</p>
+          <h1>Instrumentales Profesionales para tus Canciones</h1>
+          <p class="hero-subtitle">
+            Trap, Rap, R&B, Drill y más – listos para descargar y usar en tus
+            proyectos.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#catalog">Escuchar ahora</a>
+            <a class="btn secondary" href="#offer">Ver oferta especial</a>
+          </div>
+        </div>
+        <div class="hero-beat-destacado">
+          <article class="beat-card" data-genre="trap" data-license="licencia">
+            <img
+              src="assets/img/beat1.webp"
+              alt="Portada del beat Neon Nights"
+              class="beat-cover"
+            />
+            <div class="beat-info">
+              <h3>Exótica</h3>
+              <p class="beat-genre">Reggaeton · 74 BPM</p>
+              <!-- <audio controls preload="none" class="beat-player">
+                <source
+                  src="assets/audio/neon-nights-preview.mp3"
+                  type="audio/mpeg"
+                />
+                Tu navegador no soporta la reproducción de audio.
+              </audio> -->
+              <div class="beat-meta">
+                <span class="beat-price">23 USD</span>
+                <span class="beat-license">Licencia Standard</span>
+              </div>
+              <button class="btn tertiary" type="button">Comprar Beat</button>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+    </header>
+
+    <main>
+      <section class="catalog" id="catalog">
+        <div class="section-header">
+          <h2>Catálogo de Beats</h2>
+          <p>
+            Selecciona por género o tipo de licencia y escucha un preview de 30
+            segundos.
+          </p>
+        </div>
+        <div class="filters" role="group" aria-label="Filtros del catálogo">
+          <button class="filter-btn active" data-filter="all">Todos</button>
+          <button class="filter-btn" data-filter="trap">Trap</button>
+          <button class="filter-btn" data-filter="rap">Rap</button>
+          <button class="filter-btn" data-filter="reggaeton">Reggaeton</button>
+          <button class="filter-btn" data-filter="drill">Drill</button>
+          <button class="filter-btn" data-filter="exclusivo">Exclusivo</button>
+          <button class="filter-btn" data-filter="licencia">Licencia</button>
+        </div>
+        <div class="beats-grid" data-custom-beats-target="home">
+          <article
+            class="beat-card"
+            data-genre="reggaeton"
+            data-license="licencia"
+          >
+            <img
+              src="assets/img/beat1.webp"
+              alt="Portada del beat Neon Nights"
+              class="beat-cover"
+            />
+            <div class="beat-info">
+              <h3>Exótica</h3>
+              <p class="beat-genre">Reggaeton · 74 BPM</p>
+              <audio controls preload="none" class="beat-player">
+                <source
+                  src="assets/audio/neon-nights-preview.mp3"
+                  type="audio/mpeg"
+                />
+                Tu navegador no soporta la reproducción de audio.
+              </audio>
+              <div class="beat-meta">
+                <span class="beat-price">20 USD</span>
+                <span class="beat-license">Licencia Standard</span>
+              </div>
+              <button class="btn tertiary" type="button">Comprar Beat</button>
+            </div>
+          </article>
+          <article
+            class="beat-card"
+            data-genre="drill"
+            data-license="exclusivo"
+          >
+            <img
+              src="assets/img/beat2.webp"
+              alt="Portada del beat Golden Flow"
+              class="beat-cover"
+            />
+            <div class="beat-info">
+              <h3>Under Pleassure</h3>
+              <p class="beat-genre">Drill · 90 BPM</p>
+              <audio controls preload="none" class="beat-player">
+                <source
+                  src="assets/audio/golden-flow-preview.mp3"
+                  type="audio/mpeg"
+                />
+                Tu navegador no soporta la reproducción de audio.
+              </audio>
+              <div class="beat-meta">
+                <span class="beat-price">80 USD</span>
+                <span class="beat-license">Licencia Exclusiva</span>
+              </div>
+              <button class="btn tertiary" type="button">
+                Reservar Exclusivo
+              </button>
+            </div>
+          </article>
+          <article class="beat-card" data-genre="trap" data-license="licencia">
+            <img
+              src="assets/img/beat3.webp"
+              alt="Portada del beat Velvet Dreams"
+              class="beat-cover"
+            />
+            <div class="beat-info">
+              <h3>Dreaming</h3>
+              <p class="beat-genre">Trap · 82 BPM</p>
+              <audio controls preload="none" class="beat-player">
+                <source
+                  src="assets/audio/velvet-dreams-preview.mp3"
+                  type="audio/mpeg"
+                />
+                Tu navegador no soporta la reproducción de audio.
+              </audio>
+              <div class="beat-meta">
+                <span class="beat-price">40 USD</span>
+                <span class="beat-license">Licencia Premium</span>
+              </div>
+              <button class="btn tertiary" type="button">Comprar Beat</button>
+            </div>
+          </article>
+          <article class="beat-card" data-genre="drill" data-license="licencia">
+            <img
+              src="assets/img/beat4.webp"
+              alt="Portada del beat Dark Alley"
+              class="beat-cover"
+            />
+            <div class="beat-info">
+              <h3>Rappers 3</h3>
+              <p class="beat-genre">Rap · 144 BPM</p>
+              <audio controls preload="none" class="beat-player">
+                <source
+                  src="assets/audio/dark-alley-preview.mp3"
+                  type="audio/mpeg"
+                />
+                Tu navegador no soporta la reproducción de audio.
+              </audio>
+              <div class="beat-meta">
+                <span class="beat-price">20 USD</span>
+                <span class="beat-license">Licencia Standard</span>
+              </div>
+              <button class="btn tertiary" type="button">Comprar Beat</button>
+            </div>
+          </article>
+        </div>
+      </section>
+      <section class="services" id="services">
+        <div class="section-header">
+          <h2>Servicios de Producción</h2>
+          <p>
+            Optimiza tu proyecto con paquetes flexibles y reserva tu sesión con
+            30% de seña. El resto se abona al entregar.
+          </p>
+        </div>
+        <div class="services-grid base-services">
+          <article class="service-card">
+            <h3>Grabación</h3>
+            <p class="service-price">$15 USD</p>
+            <p class="service-note">
+              Sesión de tracking en estudio híbrido con ingeniero dedicado.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3>Mezcla</h3>
+            <p class="service-price">$35 USD</p>
+            <p class="service-note">
+              Balance tonal, espacial y dinámico listo para streaming.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3>Master</h3>
+            <p class="service-price">$20 USD</p>
+            <p class="service-note">
+              Optimización final para volumen competitivo y claridad global.
+            </p>
+          </article>
+        </div>
+
+        <div class="combos">
+          <h3>Combos con descuento</h3>
+          <div class="combo-grid">
+            <article class="combo-card">
+              <h4>Grabación + Mezcla</h4>
+              <p class="combo-price">
+                $45 USD <span class="combo-old">$50 USD</span>
+              </p>
+              <p>Ahorra y llévate el track listo para masterizar.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Master</h4>
+              <p class="combo-price">
+                $30 USD <span class="combo-old">$35 USD</span>
+              </p>
+              <p>Ideal para voces, podcasts o demos rápidas.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Mezcla + Master</h4>
+              <p class="combo-price">
+                $50 USD <span class="combo-old">$55 USD</span>
+              </p>
+              <p>Entrega profesional lista para plataformas.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Mezcla + Master</h4>
+              <p class="combo-price">
+                $60 USD <span class="combo-old">$70 USD</span>
+              </p>
+              <p>Workflow completo desde la toma al release.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Beat</h4>
+              <p class="combo-price">
+                $45 USD <span class="combo-old">$50 USD</span>
+              </p>
+              <p>Incluye instrumental curado para tu sesión.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Beat + Mezcla + Master</h4>
+              <p class="combo-price">
+                $80 USD <span class="combo-old">$90 USD</span>
+              </p>
+              <p>Paquete listo para lanzar con calidad de sello.</p>
+            </article>
+            <article class="combo-card">
+              <h4>Grabación + Beat + Mezcla</h4>
+              <p class="combo-price">
+                $75 USD <span class="combo-old">$85 USD</span>
+              </p>
+              <p>Construye tu single con soporte end-to-end.</p>
+            </article>
+            <article class="combo-card highlight">
+              <h4>Full Pack</h4>
+              <p class="combo-price">
+                $90 USD <span class="combo-old">$105 USD</span>
+              </p>
+              <p>
+                Grabación + Beat + Mezcla + Master. Todo listo para
+                distribución.
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <div class="service-info-grid">
+          <article class="service-info-card">
+            <h3>Licencias de Producción</h3>
+            <ul>
+              <li>2%–5% de regalías sobre el máster final.</li>
+              <li>
+                +0%–10% de publishing si aporto ideas creativas que transformen
+                la composición.
+              </li>
+            </ul>
+          </article>
+          <article class="service-info-card">
+            <h3>Estructura de precios</h3>
+            <ul>
+              <li>
+                <strong>Producción</strong> = precio fijo + % en máster (y
+                publishing si aplica).
+              </li>
+              <li>
+                <strong>Beat</strong> = precio de licencia + % de publishing
+                (más alto en Standard/Premium).
+              </li>
+            </ul>
+          </article>
+          <article class="service-info-card">
+            <h3>Reservas y cancelaciones</h3>
+            <ul>
+              <li>Reserva tu fecha con una seña del 30%.</li>
+              <li>El balance se abona al entregar el proyecto.</li>
+              <li>Cancelaciones: avisar con 24–48 h de anticipación.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+      <section class="value" id="value">
+        <div class="section-header">
+          <h2>¿Por qué escoger mis beats?</h2>
+          <p>
+            Creatividad, impacto y velocidad de entrega para que tu release
+            suene profesional desde el primer segundo.
+          </p>
+        </div>
+        <div class="value-grid">
+          <div class="value-card">
+            <h3>Listos para lanzar</h3>
+            <p>
+              Instrumentales mezclados y masterizados en estudios de referencia
+              para que solo tengas que grabar y publicar.
+            </p>
+          </div>
+          <div class="value-card">
+            <h3>Licencias flexibles</h3>
+            <p>
+              Elige entre Standard, Premium o Exclusiva según tus necesidades de
+              distribución y monetización.
+            </p>
+          </div>
+          <div class="value-card">
+            <h3>Soporte postventa</h3>
+            <p>
+              Te acompañamos con stems, ajustes de tono o tempo y cualquier duda
+              sobre tu licencia.
+            </p>
+          </div>
+        </div>
+        <div class="authority">
+          <p>
+            <strong>Más de 500 artistas</strong> ya confían en nuestras
+            producciones y renovamos catálogo cada semana.
+          </p>
+        </div>
+      </section>
+
+      <section class="testimonials" id="testimonios">
+        <div class="section-header">
+          <h2>Testimonios</h2>
+          <p>Artistas que ya transformaron su sonido con mis instrumentales.</p>
+        </div>
+        <div class="testimonials-grid">
+          <article class="testimonial-card">
+            <p class="quote">
+              “Desde que trabajo con Dame6k mis tracks suenan a nivel
+              internacional. El beat llegó limpio y con stems listos.”
+            </p>
+            <p class="author">– Kira, Artista Trap</p>
+          </article>
+          <article class="testimonial-card">
+            <p class="quote">
+              “La licencia Premium me permitió lanzar mi EP en todas las
+              plataformas sin complicaciones. 100% recomendado.”
+            </p>
+            <p class="author">– Sombra, Rapero</p>
+          </article>
+          <article class="testimonial-card">
+            <p class="quote">
+              “La atención postventa es brutal. Ajustaron el beat a mi tono y
+              entregaron stems al instante.”
+            </p>
+            <p class="author">– Lía, Cantante R&B</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="offer" id="offer">
+        <div class="offer-content">
+          <p class="tag">Oferta especial</p>
+          <h2>Pack de 3 instrumentales a precio especial</h2>
+          <p class="offer-description">
+            Combina cualquier estilo y recibe stems + licencias Premium listas
+            para tu próximo lanzamiento.
+          </p>
+          <div class="offer-pricing">
+            <span class="discounted-price">240 USD</span>
+            <span class="original-price">350 USD</span>
+          </div>
+          <button class="btn primary" type="button" data-scroll="#purchase">
+            Comprar Pack
+          </button>
+        </div>
+      </section>
+
+      <section class="licenses" id="licenses">
+        <div class="section-header">
+          <h2>Licencias y Garantía</h2>
+          <p>
+            Transparencia total para que elijas la licencia ideal para tu
+            release.
+          </p>
+        </div>
+        <div class="licenses-grid">
+          <article class="license-card">
+            <h3>Standard</h3>
+            <p>
+              20–40 USD — MP3/WAV en alta calidad para YouTube, mixtapes y
+              proyectos chicos. Regalías: 50% publishing.
+            </p>
+          </article>
+          <article class="license-card">
+            <h3>Premium</h3>
+            <p>
+              40–80 USD — MP3/WAV + stems. Uso extendido en Spotify, Apple Music
+              y shows. Regalías: 25% publishing.
+            </p>
+          </article>
+          <article class="license-card">
+            <h3>Exclusiva</h3>
+            <p>
+              80–150 USD — Stems + derechos completos. Uso ilimitado y retirada
+              del catálogo al venderse. Regalías: 10% publishing.
+            </p>
+          </article>
+        </div>
+        <div class="guarantee">
+          <p>
+            <strong>Entrega inmediata + soporte postventa</strong> para
+            garantizar que tu másica suene como merece.
+          </p>
+        </div>
+        <div class="royalty-note">
+          <p>
+            Las licencias Exclusiva y Premium incluyen actualización del
+            contrato para reflejar regalías y publishing acordados.
+          </p>
+        </div>
+      </section>
+
+      <section class="purchase" id="purchase">
+        <div class="purchase-content">
+          <h2>Listo para comprar</h2>
+          <p>
+            Selecciona tu método de pago seguro y recibe la descarga automática
+            tras la compra.
+          </p>
+          <div class="payment-buttons">
+            <button class="payment-btn paypal" type="button">
+              Pagar con PayPal
+            </button>
+            <button class="payment-btn mp" type="button">
+              Pagar con MercadoPago
+            </button>
+          </div>
+          <p class="purchase-note">
+            * Pagos simulados para la demostración. Conecta tus links reales en
+            el panel de ventas. Reserva tu fecha con una seña del 30% y liquida
+            el resto al entregar.
+          </p>
+        </div>
+      </section>
+
+      <section class="admin" id="adminPanel" hidden>
+        <div class="section-header">
+          <h2>Panel de beats</h2>
+          <p>
+            Solo los administradores pueden registrar nuevas publicaciones en el
+            catalogo.
+          </p>
+        </div>
+        <div class="admin-wrapper">
+          <form class="admin-form" id="beatForm" autocomplete="off">
+            <div class="admin-form__grid">
+              <label class="form-field">
+                <span class="form-label">Nombre del beat</span>
+                <input
+                  type="text"
+                  id="beatTitle"
+                  name="title"
+                  required
+                  placeholder="Ej: Sunset Drive"
+                />
+              </label>
+              <label class="form-field">
+                <span class="form-label">Categoria</span>
+                <select id="beatCategory" name="category" required>
+                  <option value="">Selecciona una opcion</option>
+                  <option value="trap">Trap</option>
+                  <option value="rap">Rap</option>
+                  <option value="reggaeton">Reggaeton</option>
+                  <option value="rnb">R&B</option>
+                  <option value="drill">Drill</option>
+                  <option value="afrobeat">Afrobeat</option>
+                  <option value="exclusiva">Exclusiva</option>
+                </select>
+              </label>
+              <label class="form-field">
+                <span class="form-label">Precio (USD)</span>
+                <input
+                  type="number"
+                  id="beatPrice"
+                  name="price"
+                  min="1"
+                  step="1"
+                  required
+                  placeholder="Ej: 40"
+                />
+              </label>
+              <label class="form-field">
+                <span class="form-label">Oferta</span>
+                <input
+                  type="text"
+                  id="beatOffer"
+                  name="offer"
+                  placeholder="Ej: 2x1 hasta fin de mes"
+                />
+              </label>
+              <label class="form-field form-field--full">
+                <span class="form-label">Archivos incluidos</span>
+                <textarea
+                  id="beatFiles"
+                  name="files"
+                  rows="3"
+                  placeholder="MP3 HQ, WAV, Stems"
+                ></textarea>
+              </label>
+              <label class="form-field form-field--full">
+                <span class="form-label">Imagen del beat</span>
+                <input
+                  type="file"
+                  id="beatImage"
+                  name="image"
+                  accept="image/*"
+                  required
+                />
+              </label>
+            </div>
+            <button class="btn primary" type="submit">Guardar beat</button>
+            <p class="form-helper">
+              La imagen y los datos se guardan localmente en este navegador.
+            </p>
+            <div class="form-feedback" id="beatFormMessage" aria-live="polite"></div>
+          </form>
+        </div>
+        <div class="admin-beats">
+          <h3>Beats creados</h3>
+          <p class="admin-beats__note">
+            Los beats que cargues apareceran inmediatamente en el catalogo
+            publico.
+          </p>
+          <div class="admin-beats__empty" id="adminBeatsEmpty">
+            Todavia no agregaste nuevos beats.
+          </div>
+          <div
+            class="admin-beats__grid"
+            data-custom-beats-target="admin"
+            id="adminBeatsContainer"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="contact">
+      <div class="footer-content">
+        <div>
+          <h4>Beats by Dame6k</h4>
+          <p>Email: <a href="mailto:beats@Dame6k.com">beats@dame6k.com</a></p>
+          <p>
+            WhatsApp:
+            <a href="https://wa.me/5491123863488">+54 9 11 2386-3488</a>
+          </p>
+        </div>
+        <div>
+          <h4>Síguenos</h4>
+          <ul class="social-links">
+            <li>
+              <a href="https://instagram.com" target="_blank" rel="noopener"
+                >Instagram</a
+              >
+            </li>
+            <li>
+              <a href="https://youtube.com" target="_blank" rel="noopener"
+                >YouTube</a
+              >
+            </li>
+            <li>
+              <a href="https://spotify.com" target="_blank" rel="noopener"
+                >Spotify</a
+              >
+            </li>
+            <li>
+              <a href="https://soundcloud.com" target="_blank" rel="noopener"
+                >SoundCloud</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <p>© 2025 Beats by Dame6k. Todos los derechos reservados.</p>
+          <a href="#licenses">Aviso legal</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="auth-modal" id="authModal" aria-hidden="true">
+      <div class="auth-modal__backdrop" data-auth-close></div>
+      <div
+        class="auth-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="authModalTitle"
+      >
+        <button
+          class="auth-modal__close"
+          type="button"
+          aria-label="Cerrar"
+          data-auth-close
+        >
+          &times;
+        </button>
+        <div class="auth-modal__tabs" role="tablist">
+          <button
+            type="button"
+            class="auth-tab active"
+            data-auth-tab="login"
+            role="tab"
+            aria-selected="true"
+          >
+            Iniciar sesion
+          </button>
+          <button
+            type="button"
+            class="auth-tab"
+            data-auth-tab="register"
+            role="tab"
+            aria-selected="false"
+          >
+            Crear cuenta
+          </button>
+        </div>
+        <form class="auth-form" id="loginForm" data-auth-panel="login" novalidate>
+          <h2 class="auth-form__title" id="authModalTitle">Iniciar sesion</h2>
+          <label class="form-field">
+            <span class="form-label">Email</span>
+            <input
+              type="email"
+              name="email"
+              id="loginEmail"
+              autocomplete="email"
+              required
+            />
+          </label>
+          <label class="form-field">
+            <span class="form-label">Contrasena</span>
+            <input
+              type="password"
+              name="password"
+              id="loginPassword"
+              autocomplete="current-password"
+              required
+              minlength="6"
+            />
+          </label>
+          <button class="btn primary" type="submit">Entrar</button>
+        </form>
+        <form
+          class="auth-form is-hidden"
+          id="registerForm"
+          data-auth-panel="register"
+          novalidate
+          aria-hidden="true"
+        >
+          <h2 class="auth-form__title">Crear cuenta</h2>
+          <label class="form-field">
+            <span class="form-label">Nombre</span>
+            <input
+              type="text"
+              name="name"
+              id="registerName"
+              required
+              placeholder="Tu nombre artistico"
+            />
+          </label>
+          <label class="form-field">
+            <span class="form-label">Email</span>
+            <input
+              type="email"
+              name="email"
+              id="registerEmail"
+              autocomplete="email"
+              required
+            />
+          </label>
+          <label class="form-field">
+            <span class="form-label">Contrasena</span>
+            <input
+              type="password"
+              name="password"
+              id="registerPassword"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+          </label>
+          <button class="btn primary" type="submit">Registrarme</button>
+          <p class="form-helper">
+            Al registrarte aceptas los terminos de uso de la tienda.
+          </p>
+        </form>
+        <p class="auth-form__message" id="authFormMessage" aria-live="polite"></p>
+      </div>
+    </div>
+  </body>
+</html>
+
